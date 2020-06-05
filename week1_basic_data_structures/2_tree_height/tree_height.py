@@ -3,19 +3,30 @@
 import sys
 import threading
 
-
 def compute_height(n, parents):
-    # Replace this code with a faster implementation
     max_height = 0
+    heights = [0] * n
     for vertex in range(n):
+        if heights[vertex] != 0:
+            continue
         height = 0
-        current = vertex
-        while current != -1:
+        i = vertex
+        while i != -1:
+            if heights[i] != 0:
+                height += heights[i]
+                break
             height += 1
-            current = parents[current]
+            i = parents[i]
         max_height = max(max_height, height)
-    return max_height
 
+        i = vertex
+        while i != -1:
+            if heights[i] != 0:
+                break
+            heights[i] = height
+            height -= 1
+            i = parents[i]
+    return max_height
 
 def main():
     n = int(input())
